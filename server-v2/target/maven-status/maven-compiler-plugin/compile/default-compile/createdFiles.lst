@@ -1,0 +1,11 @@
+server/service/CircuitBreakerSQS$State.class
+server/configure/ChatServerWSHandler.class
+server/model/ChatMessage.class
+server/model/MessageQueue.class
+server/configure/ConfigureSQS.class
+server/service/CircuitBreakerSQS.class
+server/ListenerStartUp.class
+server/configure/ConfigureWebSocket.class
+server/service/PublicerSQS.class
+server/ChatServer.class
+server/configure/ServerStatus.class
