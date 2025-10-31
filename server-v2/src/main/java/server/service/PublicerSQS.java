@@ -27,9 +27,14 @@ public class PublicerSQS {
     @Value("${aws.region}")
     private String region;
 
-    //Thread-safe map ConcurrentHashMap for Stroing queue URLs:
+    //Thread-safe map ConcurrentHashMap for Stroing queue URLs
     private final ConcurrentHashMap<String, String> queueUrlCache = new ConcurrentHashMap<>();
 
+    /**
+     * Constructor with dependency injection.
+     * @param sqsClient The AWS SQS client for queue operations
+     * @param objectMapper The Jackson ObjectMapper for JSON serialization
+     */
     public PublicerSQS(SqsClient sqsClient, ObjectMapper objectMapper) {
         this.sqsClient = sqsClient;
         this.objectMapper = objectMapper;
@@ -49,6 +54,11 @@ public class PublicerSQS {
         System.out.println("*** Queue URL cache initialized for 20 rooms ***");
     }
 
+    /**
+     * Publishes a message to the appropriate SQS FIFO queue
+     * @param message The MessageQueue object containing message details and metadata
+     * @throws Error if circuit breaker is OPEN or publish fails after retries
+     */
     public void publishMessage(MessageQueue message) {
         // S1: Check circuit breaker
         if (!circuitBreaker.allowRequest()) {
@@ -78,6 +88,10 @@ public class PublicerSQS {
         }
     }
 
+    /**
+     * Tests the connection to AWS SQS by listing available queues.
+     * @throws Error if unable to connect to SQS or list queues
+     */
     public void testConnection() {
         try {
             ListQueuesResponse response = sqsClient.listQueues(
@@ -90,6 +104,10 @@ public class PublicerSQS {
         }
     }
 
+    /**
+     * Retrieves the current status of the circuit breaker
+     * @return Map containing circuit breaker state and failure count
+     */
     public Map<String, Object> getStatus() {
         Map<String, Object> status = new ConcurrentHashMap<>();
         status.put("state", circuitBreaker.getState().name());

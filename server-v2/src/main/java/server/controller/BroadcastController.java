@@ -60,12 +60,21 @@ import server.configure.ChatServerWSHandler;
 import java.time.Instant;
 import java.util.*;
 
-@RestController
+/**
+ * REST API controller for message broadcasting operations.
+ */
+ @RestController
 @RequestMapping("/api")
 public class BroadcastController {
     @Autowired
     private ChatServerWSHandler wsHandler;
 
+    /**
+     * Broadcasts a single message to all clients in the specified room
+     * @param message The MessageQueue object containing message content and metadata
+     * @return ResponseEntity with broadcast status
+     * @throws Error if broadcast operation fails
+     */
     @PostMapping("/broadcast")
     public ResponseEntity<Map<String, Object>> broadcast(@RequestBody MessageQueue message) {
         try {
@@ -86,6 +95,13 @@ public class BroadcastController {
         }
     }
 
+
+        /**
+         * Broadcasts a batch of messages to their respective rooms.
+         * @param messages List of MessageQueue objects to broadcast, typically 10 messages per batch
+         * @return ResponseEntity with batch processing status
+         * @throws Error if broadcast operation fails
+             */
     @PostMapping("/broadcast/batch")
     public ResponseEntity<Map<String, Object>> broadcastBatch(@RequestBody List<MessageQueue> messages) {
         try {
@@ -113,7 +129,10 @@ public class BroadcastController {
         }
     }
 
-    @GetMapping("/broadcast/health")
+    /**
+        * Health check endpoint for the broadcast service.
+     */
+     @GetMapping("/broadcast/health")
     public ResponseEntity<Map<String, String>> health() {
         return ResponseEntity.ok(Map.of("status", "UP"));
     }

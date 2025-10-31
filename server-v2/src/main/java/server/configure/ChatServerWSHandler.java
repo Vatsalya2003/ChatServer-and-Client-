@@ -221,7 +221,7 @@ ChatServerWSHandler implements WebSocketHandler {
     }
 
     /**
-     * NEW METHOD: Broadcast message to all clients in a room
+     * Broadcast message to all clients in a room
      * Called by BroadcastController when consumer sends REST request
      *
      * @param roomId The room to broadcast to
