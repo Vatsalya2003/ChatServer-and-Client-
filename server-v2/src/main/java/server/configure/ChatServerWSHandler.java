@@ -20,8 +20,10 @@ import server.service.PublicerSQS;
 /**
  * class ChatServerWebSocketHandler a handler for chat rooms
  */
+
 @Component
-public class ChatServerWSHandler implements WebSocketHandler {
+public class
+ChatServerWSHandler implements WebSocketHandler {
     //converts Json String to java objects for parsing incoming msg from clients
     private final ObjectMapper objectMapperMSG = new ObjectMapper();
     //validator for objects
@@ -32,7 +34,27 @@ public class ChatServerWSHandler implements WebSocketHandler {
     // for tracking of Joined Sessions
     private final Set<WebSocketSession> joinedSessions =
             ConcurrentHashMap.newKeySet();
+    //active user tracking
+    private final ConcurrentHashMap<String, UserInfo> activeUsers = new ConcurrentHashMap<>();
 
+    public static class UserInfo {
+        private String userId;
+        private String username;
+        private String roomId;
+        private long joinedAt;
+
+        public UserInfo(String userId, String username, String roomId, long joinedAt) {
+            this.userId = userId;
+            this.username = username;
+            this.roomId = roomId;
+            this.joinedAt = joinedAt;
+        }
+
+        public String getUserId() { return userId; }
+        public String getUsername() { return username; }
+        public String getRoomId() { return roomId; }
+        public long getJoinedAt() { return joinedAt; }
+    }
     //SQS Publicer
     @Autowired
     private PublicerSQS sqsPublisher;
@@ -101,6 +123,14 @@ public class ChatServerWSHandler implements WebSocketHandler {
                 }
                 chatRooms.computeIfAbsent(roomId, k -> new CopyOnWriteArrayList<>()).add(session);
                 joinedSessions.add(session);
+
+                activeUsers.put(session.getId(), new UserInfo(
+                        String.valueOf(chatMessage.getUserId()),
+                        chatMessage.getUsername(),
+                        roomId,
+                        System.currentTimeMillis()
+                ));
+
                 return chatMessage.getUsername() + " joined the room";
 
             case "LEAVE":
@@ -113,6 +143,9 @@ public class ChatServerWSHandler implements WebSocketHandler {
                     roomSessions.remove(session);
                 }
                 joinedSessions.remove(session);
+
+                activeUsers.remove(session.getId());
+
                 return chatMessage.getUsername() + " left the room";
 
             case "TEXT":
@@ -167,6 +200,7 @@ public class ChatServerWSHandler implements WebSocketHandler {
         }
 
         joinedSessions.remove(session);
+        activeUsers.remove(session.getId());
         System.out.println("<<<---Connection closed from room: " + roomId);
     }
 
@@ -184,5 +218,59 @@ public class ChatServerWSHandler implements WebSocketHandler {
     private String getClientIp(WebSocketSession session) {
         InetSocketAddress addr = session.getRemoteAddress();
         return addr != null ? addr.getAddress().getHostAddress() : "unknown";
+    }
+
+    /**
+     * NEW METHOD: Broadcast message to all clients in a room
+     * Called by BroadcastController when consumer sends REST request
+     *
+     * @param roomId The room to broadcast to
+     * @param queueMsg The message from SQS queue
+     * @return Number of clients message was sent to
+     */
+    public int broadcastToRoom(String roomId, MessageQueue queueMsg) {
+        CopyOnWriteArrayList<WebSocketSession> sessions = chatRooms.get(roomId);
+
+        if (sessions == null || sessions.isEmpty()) {
+//            System.out.println(" No clients in room " + roomId + " to broadcast to");
+            return 0;
+        }
+
+        try {
+            // Create broadcast message
+            Map<String, Object> broadcastMsg = new HashMap<>();
+            broadcastMsg.put("messageType", queueMsg.getMessageType());
+            broadcastMsg.put("username", queueMsg.getUsername());
+            broadcastMsg.put("message", queueMsg.getMessage());
+            broadcastMsg.put("timestamp", queueMsg.getTimestamp());
+            broadcastMsg.put("roomId", roomId);
+            broadcastMsg.put("userId", queueMsg.getUserId());
+
+            String jsonMessage = objectMapperMSG.writeValueAsString(broadcastMsg);
+            TextMessage textMessage = new TextMessage(jsonMessage);
+
+            int successCount = 0;
+
+            // Broadcast to all sessions in room
+            for (WebSocketSession session : sessions) {
+                if (session.isOpen()) {
+                    try {
+                        synchronized (session) {
+                            session.sendMessage(textMessage);
+                        }
+                        successCount++;
+                    } catch (IOException e) {
+//                        System.err.println("!!!!! Failed to broadcast to session: " + e.getMessage());
+                    }
+                }
+            }
+
+//            System.out.println("✓ Broadcasted to " + successCount + " clients in room " + roomId);
+            return successCount;
+
+        } catch (Exception e) {
+//            System.err.println("!!!! Broadcast error in room " + roomId + ": " + e.getMessage());
+            return 0;
+        }
     }
 }

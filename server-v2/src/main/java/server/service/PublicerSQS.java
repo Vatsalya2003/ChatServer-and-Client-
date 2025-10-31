@@ -69,7 +69,7 @@ public class PublicerSQS {
             SendMessageResponse response = sqsClient.sendMessage(request);
             circuitBreaker.recordSuccess();
 
-            System.out.println("✓ Published - Room: " + message.getRoomId());
+//            System.out.println("✓ Published - Room: " + message.getRoomId());
 
         } catch (Exception e) {
             circuitBreaker.recordFailure();
