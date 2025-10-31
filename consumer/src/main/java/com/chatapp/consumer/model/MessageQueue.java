@@ -3,8 +3,7 @@ package com.chatapp.consumer.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * Message format from SQS queue (Assignment 2)
- * Contains all fields published by the server
+ * Class MessageQueue for Message format from SQS queue
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MessageQueue {
@@ -18,7 +17,7 @@ public class MessageQueue {
     private String serverId;
     private String clientIp;
 
-    // Default constructor (required for Jackson JSON parsing)
+    // Default constructor
     public MessageQueue() {}
 
     // Full constructor

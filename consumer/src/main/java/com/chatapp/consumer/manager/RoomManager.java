@@ -85,8 +85,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * RoomManager - Batches messages and calls Server's broadcast endpoint
- * Batching reduces HTTP overhead from 1 call per message to 1 call per 10 messages
+ * Class RoomManager Batches messages and calls Server's broadcast endpoint
  */
 @Component
 public class RoomManager {

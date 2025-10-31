@@ -11,8 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * REST Controller for health checks and metrics
- * Provides endpoints for monitoring consumer application health
+ * Class ConsumerHealthController for health checks
  */
 @RestController
 public class ConsumerHealthController {
