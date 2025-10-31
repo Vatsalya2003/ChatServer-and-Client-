@@ -18,6 +18,10 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
+
+/**
+ *  Class SQSConsumer for Multithreaded SQS consumer service
+ */
 public class SQSConsumer {
 
     private final SqsClient sqsClient;
@@ -48,13 +52,22 @@ public class SQSConsumer {
     private final AtomicLong batchesFetched = new AtomicLong(0);
     private final long startTime = System.currentTimeMillis();
 
+    /**
+     * Constructor with dependency injection
+     * @param sqsClient AWS SQS client for polling queues
+     * @param objectMapper Jackson mapper for JSON operations
+     * @param roomManager Manager for batching and broadcasting messages
+     */
     public SQSConsumer(SqsClient sqsClient, ObjectMapper objectMapper, RoomManager roomManager) {
         this.sqsClient = sqsClient;
         this.objectMapper = objectMapper;
         this.roomManager = roomManager;
     }
 
-    @PostConstruct
+/**
+ * Initializes the consumer service after Spring dependency injection
+ */
+ @PostConstruct
     public void initialize() {
         System.out.println("\n" + "-------------------------------");
         System.out.println("Initializing SQS Consumer...");
@@ -81,8 +94,10 @@ public class SQSConsumer {
         startConsuming(consumersPerRoom);
         startFlushScheduler();
     }
-
-    private void startFlushScheduler() {
+/**
+ * Starts the periodic flush scheduler to send partial batches
+ */
+ private void startFlushScheduler() {
         flushScheduler = Executors.newSingleThreadScheduledExecutor();
         flushScheduler.scheduleAtFixedRate(
                 () -> {
@@ -98,7 +113,10 @@ public class SQSConsumer {
         );
     }
 
-    private void startConsuming(int consumersPerRoom) {
+/**
+ * Starts consumer threads for all rooms
+ */
+ private void startConsuming(int consumersPerRoom) {
         System.out.println("🚀 Starting " + (consumersPerRoom * 20) +
                 " total consumers across 20 rooms...\n");
 
@@ -114,6 +132,13 @@ public class SQSConsumer {
         }
     }
 
+
+    /**
+     * Main consumer loop for processing messages from a specific room's queue
+     * @param roomIndex Zero-based index for queue URL array lookup
+     * @param roomId The chat room identifier
+     * @param consumerNum The consumer thread number for this room
+     */
     private void consumeRoom(int roomIndex, String roomId, int consumerNum) {
         String queueUrl = queueUrls[roomIndex];
 
@@ -174,7 +199,10 @@ public class SQSConsumer {
         System.out.println(" Consumer #" + consumerNum + " stopped for room " + roomId);
     }
 
-    @PreDestroy
+/**
+ *  shuts down the consumer service
+ */
+ @PreDestroy
     public void stopConsuming() {
         System.out.println("\n!! Stopping SQS consumers...!!");
         running = false;
@@ -209,8 +237,10 @@ public class SQSConsumer {
 
         System.out.println(" SQS Consumer shutdown complete\n");
     }
-
-    public Map<String, Object> getMetrics() {
+/**
+ * Retrieves current consumer performance metrics
+ */
+ public Map<String, Object> getMetrics() {
         Map<String, Object> metrics = new HashMap<>(roomManager.getMetrics());
 
         long runtime = (System.currentTimeMillis() - startTime) / 1000;

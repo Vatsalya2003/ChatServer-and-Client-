@@ -19,8 +19,7 @@ public class ConfigureSQS {
     private String awsRegion;
 
     /**
-     * Creates SqsClient bean for consuming messages from SQS
-     * Uses DefaultCredentialsProvider which automatically finds LabRole on EC2
+     * Class SqsClient for consuming messages from SQS
      */
     @Bean
     public SqsClient sqsClient() {
@@ -31,7 +30,7 @@ public class ConfigureSQS {
     }
 
     /**
-     * Creates ObjectMapper bean for JSON serialization/deserialization
+     * Creates ObjectMapper bean for JSON serialization and parsing
      */
     @Bean
     public ObjectMapper objectMapper() {
