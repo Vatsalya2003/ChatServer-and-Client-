@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class MSGSenderThread implements Runnable {
 
     private static final int Retries = 5;
-    private static final int Timeout_Response = 200;
+    private static final int Timeout_Response = 1000;
 
     private String serverUrl;
     private BlockingQueue<ChatMessage> queue;
@@ -129,7 +129,7 @@ public class MSGSenderThread implements Runnable {
                     if (attempt > 1) {
                         onReconnect();
                     }
-                    sendJoinMessage();
+//                    sendJoinMessage();
                     return true;
                 }
 
