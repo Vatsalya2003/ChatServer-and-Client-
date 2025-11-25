@@ -7,6 +7,8 @@ import jakarta.validation.constraints.*;
  */
 public class ChatMessage {
 
+    private String messageId;
+
     @Min(1) @Max(100000)
     private int userId; // valid range: 1-100000
 
@@ -75,4 +77,6 @@ public class ChatMessage {
      * @param messageType, set the message type(TEXT, JOIN, LEAVE)
      */
     public void setMessageType(String messageType) { this.messageType = messageType; }
+    public String getMessageId() { return messageId; }
+    public void setMessageId(String messageId) { this.messageId = messageId; }
 }

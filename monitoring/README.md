@@ -1,74 +1,36 @@
 # Monitoring Scripts
 
-## Overview
-Simple scripts to monitor system health and SQS queue depths.
-
 ## Scripts
 
-### check-health.sh
-Checks health status of all system components:
-- 4 server instances (port 8080)
-- Consumer application (port 8081)
-- Application Load Balancer
+### check_all_metrics.sh
+Collects complete system snapshot from all nodes.
+Usage: `./check_all_metrics.sh > snapshot.txt`
 
-### monitor-queues.sh
-Monitors SQS queue depths:
-- Shows message count for all 20 rooms
-- Displays total messages across all queues
-- Helps identify queue backlogs
+### monitor_realtime.sh
+Live monitoring during tests (updates every 5 seconds).
+Usage: `./monitor_realtime.sh`
 
-## Setup
-```bash
-# Make scripts executable
-chmod +x check-health.sh
-chmod +x monitor-queues.sh
+### check_db_health.sh
+Database connection and health check.
+Usage: `./check_db_health.sh`
+
+## Metrics Collected
+- Server: SQS publish counters, circuit breaker status
+- Consumer: Messages consumed, write throughput
+- Database: Connection count, message totals
 ```
 
-## Usage
+---
 
-### Health Check:
-```bash
-./check-health.sh
+## **📁 FOLDER STRUCTURE:**
 ```
+/database/
+├── schema.sql
+├── setup.sh
+└── README.md
 
-**Output:**
-```
------- Server Health ------
-Server 52.12.239.32: RUNNING
-Server 35.91.44.114: RUNNING
-Server 18.237.244.191: RUNNING
-Server 44.243.189.214: RUNNING
-
------- Consumer Health ------
-{"status":"UP","service":"Chat Consumer"}
-
------- ALB Health ------
-{"status":"RUNNING"}
-```
-
-### Queue Monitoring:
-```bash
-./monitor-queues.sh
-```
-
-**Output:**
-```
------- SQS Queue Depths ------
-
-Room  1:    1128 messages
-Room  2:    1078 messages
-Room  3:      979 messages
-...
-Room 20:    1220 messages
-```
-
-## Configuration
-
-Update IP addresses in scripts:
-- **check-health.sh:** Lines 4-9 (server IPs, consumer IP, ALB DNS)
-- **monitor-queues.sh:** Lines 4-5 (AWS account ID, region)
-
-## Requirements
-- curl (for health checks)
-- AWS CLI (for queue monitoring)
-- Network access to EC2 instances on ports 8080, 8081
+/monitoring/
+├── check_metrics.sh
+├── monitor.sh
+├── check_db_health.sh
+└── README.md

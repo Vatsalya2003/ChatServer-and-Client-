@@ -15,9 +15,9 @@ public class CircuitBreakerSQS {
     private final AtomicInteger successCount = new AtomicInteger(0);
     private final AtomicLong lastFailureTime = new AtomicLong(0);
 
-    private final int failureThreshold = 5;
-    private final long resetTimeout = 60000;
-    private final int successThreshold = 2;
+    private final int failureThreshold = 10;  // Increased from 5
+    private final long resetTimeout = 30000;   // Reduced from 60000 (30 seconds)
+    private final int successThreshold = 3;    // Increased from 2
 
     /**
      * Determines if a request should be allowed based on circuit breaker Condition

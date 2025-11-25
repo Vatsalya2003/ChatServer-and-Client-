@@ -1,11 +1,13 @@
 package client2.model;
 
 import com.google.gson.Gson;
+import java.util.UUID;
 
 /**
  * class ChatMessage for model
  */
 public class ChatMessage {
+    private String messageId;
     private int userId;
     private String username;
     private String message;
@@ -21,6 +23,7 @@ public class ChatMessage {
      */
     public ChatMessage(int userId, String username, String message,
                        String timestamp, String messageType) {
+        this.messageId = UUID.randomUUID().toString();
         this.userId = userId;
         this.username = username;
         this.message = message;
@@ -43,5 +46,7 @@ public class ChatMessage {
     /**
      * @return gives Message Types
      */
-    public String getMessageType() { return messageType; }  // ← Need this for stats!
+    public String getMessageType() { return messageType; }
+
+    public String getMessageId() { return messageId; }
 }

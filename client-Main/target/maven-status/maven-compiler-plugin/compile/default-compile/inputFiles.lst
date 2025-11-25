@@ -1,6 +1,6 @@
-/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/client-part2/src/main/java/client2/MSGSenderThread.java
-/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/client-part2/src/main/java/client2/MessageData.java
-/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/client-part2/src/main/java/client2/GenerateMessage.java
-/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/client-part2/src/main/java/client2/model/Metric.java
-/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/client-part2/src/main/java/client2/model/ChatMessage.java
-/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/client-part2/src/main/java/client2/MainPhase.java
+/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/client-Main/src/main/java/client2/model/ChatMessage.java
+/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/client-Main/src/main/java/client2/MSGSenderThread.java
+/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/client-Main/src/main/java/client2/GenerateMessage.java
+/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/client-Main/src/main/java/client2/MessageData.java
+/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/client-Main/src/main/java/client2/model/Metric.java
+/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/client-Main/src/main/java/client2/MainPhase.java
