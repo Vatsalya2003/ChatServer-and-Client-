@@ -9,6 +9,8 @@ import server.model.MessageQueue;
 import jakarta.annotation.PostConstruct;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
+
 
 /**
  * Thread-safe SQS Publisher with connection pooling and circuit breaker
@@ -20,6 +22,10 @@ public class PublicerSQS {
     //json serialization
     private final ObjectMapper objectMapper;
     private final CircuitBreakerSQS circuitBreaker = new CircuitBreakerSQS();
+
+    private final AtomicLong messagesPublished = new AtomicLong(0);
+    private final AtomicLong publishFailures = new AtomicLong(0);
+    private final AtomicLong circuitBreakerDrops = new AtomicLong(0);
 
     @Value("${aws.account.id}")
     private String accountId;
@@ -62,6 +68,7 @@ public class PublicerSQS {
     public void publishMessage(MessageQueue message) {
         // S1: Check circuit breaker
         if (!circuitBreaker.allowRequest()) {
+            circuitBreakerDrops.incrementAndGet();  // ← ADD THIS LINE
             throw new RuntimeException("Circuit breaker is OPEN");
         }
 
@@ -79,10 +86,14 @@ public class PublicerSQS {
             SendMessageResponse response = sqsClient.sendMessage(request);
             circuitBreaker.recordSuccess();
 
+            messagesPublished.incrementAndGet();  // ← ADD THIS LINE
+
 //            System.out.println("✓ Published - Room: " + message.getRoomId());
 
         } catch (Exception e) {
             circuitBreaker.recordFailure();
+            publishFailures.incrementAndGet();  // ← ADD THIS LINE
+
             System.err.println("✗ SQS Error: " + e.getMessage());
             throw new RuntimeException("Failed to publish", e);
         }
@@ -112,6 +123,12 @@ public class PublicerSQS {
         Map<String, Object> status = new ConcurrentHashMap<>();
         status.put("state", circuitBreaker.getState().name());
         status.put("failures", circuitBreaker.getFailureCount());
+
+        // ADD THESE 3 LINES
+        status.put("published", messagesPublished.get());
+        status.put("publishFailures", publishFailures.get());
+        status.put("circuitBreakerDrops", circuitBreakerDrops.get());
+
         return status;
     }
 }

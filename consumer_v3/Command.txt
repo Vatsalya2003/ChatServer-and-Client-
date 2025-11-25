@@ -1,0 +1,84 @@
+# Start both services
+./start-server.sh
+./start-consumer.sh
+
+# Check status
+./status.sh
+
+# Stop everything
+./stop-all.sh
+
+# View logs
+tail -f server/server.log
+tail -f consumer/consumer.log
+
+
+#DB
+
+sudo systemctl start mariadb
+
+scp -i cs6650_ChatApp.pem ChatServer-and-Client-/consumer_v3/target/consumer-0.0.1-SNAPSHOT.jar ec2-user@35.164.237.173:/home/ec2-user/consumer/consumer.jar
+
+scp -i cs6650_ChatApp.pem ChatServer-and-Client-/server-v2/target/Server-0.0.1-SNAPSHOT.jar ec2-user@35.164.237.173:/home/ec2-user/server/server.jar
+
+
+mysql -u vatsalya -pVatsalya2024! chatServerDB -e "SELECT COUNT(*) as count FROM messages;"
+
+cd ..
+cd ..
+
+
+# Set your server IPs
+SERVER1="44.243.216.224"
+SERVER2="44.244.47.21"
+SERVER3="35.88.219.55"
+SERVER4="44.252.17.175"
+
+# Deploy to all 4
+for ip in $SERVER1 $SERVER2 $SERVER3 $SERVER4; do
+echo "Deploying to $ip..."
+scp -i cs6650_ChatApp.pem ChatServer-and-Client-/consumer_v3/target/consumer-0.0.1-SNAPSHOT.jar ec2-user@$ip:/home/ec2-user/consumer/consumer.jar
+echo "✅ Deployed to $ip"
+done
+
+# Deploy to all 4
+for ip in $SERVER1 $SERVER2 $SERVER3 $SERVER4; do
+echo "Deploying to $ip..."
+scp -i cs6650_ChatApp.pem ChatServer-and-Client-/server-v2/target/Server-0.0.1-SNAPSHOT.jar ec2-user@$ip:/home/ec2-user/server/server.jar
+echo "✅ Deployed to $ip"
+done
+
+cat /home/ec2-user/consumer/application.properties | grep -E "batch.size|threads|flush"
+
+DB Command
+
+sudo systemctl start mariadb
+sudo systemctl stop mariadb
+sudo systemctl status mariadb
+sudo systemctl restart mariadb
+
+mysql -u vatsalya -pVatsalya2024! chatServerDB -e "SELECT COUNT(*) as Messages FROM messages;"
+
+
+./monitor_db.sh
+
+cd server
+nohup java -jar server.jar > server.log 2>&1 &
+
+curl http://localhost:8080/health
+
+cd consumer
+nohup java -jar consumer.jar > consumer.log 2>&1 &
+
+curl http://localhost:8081/health
+
+
+echo "========================================="
+echo "ALL SERVERS SQS STATUS"
+echo "========================================="
+
+for server in 18.236.94.113 34.208.245.83 34.221.32.34 34.215.72.202; do
+    echo ""
+    echo "Server: $server"
+    curl -s http://$server:8080/sqs-status | python3 -m json.tool
+done

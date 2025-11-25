@@ -84,8 +84,8 @@ public class BroadcastController {
             response.put("roomId", message.getRoomId());
             response.put("clientCount", clientCount);
             response.put("messageId", message.getMessageId());
-            System.out.println("✓ Broadcast via API - Room " + message.getRoomId() +
-                    " to " + clientCount + " clients");
+//            System.out.println("✓ Broadcast via API - Room " + message.getRoomId() +
+//                    " to " + clientCount + " clients");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             Map<String, Object> error = new HashMap<>();
@@ -95,29 +95,25 @@ public class BroadcastController {
         }
     }
 
-
-        /**
-         * Broadcasts a batch of messages to their respective rooms.
-         * @param messages List of MessageQueue objects to broadcast, typically 10 messages per batch
-         * @return ResponseEntity with batch processing status
-         * @throws Error if broadcast operation fails
-             */
+    /**
+     * Broadcasts a batch of messages to their respective rooms - PARALLEL OPTIMIZED
+     * Uses parallel streams to broadcast to multiple rooms simultaneously
+     * @param messages List of MessageQueue objects to broadcast (typically 200 messages per batch)
+     * @return ResponseEntity with batch processing status
+     */
     @PostMapping("/broadcast/batch")
     public ResponseEntity<Map<String, Object>> broadcastBatch(@RequestBody List<MessageQueue> messages) {
         try {
-            int totalClients = 0;
-
-            for (MessageQueue message : messages) {
-                totalClients += wsHandler.broadcastToRoom(message.getRoomId(), message);
-            }
+            // OPTIMIZATION: Process broadcasts in parallel for different rooms
+            // This uses the spring.task.execution thread pool configured in application.properties
+            int totalClients = messages.parallelStream()
+                    .mapToInt(message -> wsHandler.broadcastToRoom(message.getRoomId(), message))
+                    .sum();
 
             Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("messagesProcessed", messages.size());
             response.put("totalClientCount", totalClients);
-
-//            System.out.println("✓ Batch broadcast - " + successCount + " messages to " +
-//                    totalClients + " total clients");
 
             return ResponseEntity.ok(response);
 

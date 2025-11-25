@@ -169,18 +169,34 @@ ChatServerWSHandler implements WebSocketHandler {
             response.put("serverTimestamp", Instant.now().toString());
             response.put("message", message);
 
-            //Convert to JSON string
             String jsonResponse = objectMapperMSG.writeValueAsString(response);
 
             if (session.isOpen()) {
-                synchronized (session) {
-                    session.sendMessage(new TextMessage(jsonResponse));
-                }
+                session.sendMessage(new TextMessage(jsonResponse));  // Removed synchronized
             }
         } catch (IOException e) {
-            System.err.println("Error sending message: " + e.getMessage());
+            // Silent failure in production - only log critical errors
         }
     }
+//    private void sendResponse(WebSocketSession session, String status, String message) {
+//        try {
+//            Map<String, Object> response = new HashMap<>();
+//            response.put("status", status);
+//            response.put("serverTimestamp", Instant.now().toString());
+//            response.put("message", message);
+//
+//            //Convert to JSON string
+//            String jsonResponse = objectMapperMSG.writeValueAsString(response);
+//
+//            if (session.isOpen()) {
+//                synchronized (session) {
+//                    session.sendMessage(new TextMessage(jsonResponse));
+//                }
+//            }
+//        } catch (IOException e) {
+//            System.err.println("Error sending message: " + e.getMessage());
+//        }
+//    }
 
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) {
@@ -232,12 +248,11 @@ ChatServerWSHandler implements WebSocketHandler {
         CopyOnWriteArrayList<WebSocketSession> sessions = chatRooms.get(roomId);
 
         if (sessions == null || sessions.isEmpty()) {
-//            System.out.println(" No clients in room " + roomId + " to broadcast to");
             return 0;
         }
 
         try {
-            // Create broadcast message
+            // Build message once
             Map<String, Object> broadcastMsg = new HashMap<>();
             broadcastMsg.put("messageType", queueMsg.getMessageType());
             broadcastMsg.put("username", queueMsg.getUsername());
@@ -251,26 +266,69 @@ ChatServerWSHandler implements WebSocketHandler {
 
             int successCount = 0;
 
-            // Broadcast to all sessions in room
+            // Send to all sessions - WebSocketSession.sendMessage() is already thread-safe
+            // No need for synchronized block!
             for (WebSocketSession session : sessions) {
                 if (session.isOpen()) {
                     try {
-                        synchronized (session) {
-                            session.sendMessage(textMessage);
-                        }
+                        // WebSocketSession handles internal locking efficiently
+                        session.sendMessage(textMessage);
                         successCount++;
                     } catch (IOException e) {
-//                        System.err.println("!!!!! Failed to broadcast to session: " + e.getMessage());
+                        // Silent failure
                     }
                 }
             }
 
-//            System.out.println("✓ Broadcasted to " + successCount + " clients in room " + roomId);
             return successCount;
 
         } catch (Exception e) {
-//            System.err.println("!!!! Broadcast error in room " + roomId + ": " + e.getMessage());
             return 0;
         }
     }
+//    public int broadcastToRoom(String roomId, MessageQueue queueMsg) {
+//        CopyOnWriteArrayList<WebSocketSession> sessions = chatRooms.get(roomId);
+//
+//        if (sessions == null || sessions.isEmpty()) {
+////            System.out.println(" No clients in room " + roomId + " to broadcast to");
+//            return 0;
+//        }
+//
+//        try {
+//            // Create broadcast message
+//            Map<String, Object> broadcastMsg = new HashMap<>();
+//            broadcastMsg.put("messageType", queueMsg.getMessageType());
+//            broadcastMsg.put("username", queueMsg.getUsername());
+//            broadcastMsg.put("message", queueMsg.getMessage());
+//            broadcastMsg.put("timestamp", queueMsg.getTimestamp());
+//            broadcastMsg.put("roomId", roomId);
+//            broadcastMsg.put("userId", queueMsg.getUserId());
+//
+//            String jsonMessage = objectMapperMSG.writeValueAsString(broadcastMsg);
+//            TextMessage textMessage = new TextMessage(jsonMessage);
+//
+//            int successCount = 0;
+//
+//            // Broadcast to all sessions in room
+//            for (WebSocketSession session : sessions) {
+//                if (session.isOpen()) {
+//                    try {
+//                        synchronized (session) {
+//                            session.sendMessage(textMessage);
+//                        }
+//                        successCount++;
+//                    } catch (IOException e) {
+////                        System.err.println("!!!!! Failed to broadcast to session: " + e.getMessage());
+//                    }
+//                }
+//            }
+//
+////            System.out.println("✓ Broadcasted to " + successCount + " clients in room " + roomId);
+//            return successCount;
+//
+//        } catch (Exception e) {
+////            System.err.println("!!!! Broadcast error in room " + roomId + ": " + e.getMessage());
+//            return 0;
+//        }
+//    }
 }

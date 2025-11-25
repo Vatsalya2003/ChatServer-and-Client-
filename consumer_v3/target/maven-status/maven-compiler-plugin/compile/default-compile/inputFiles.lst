@@ -1,0 +1,7 @@
+/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/consumer_v3/src/main/java/com/chatapp/consumer/ConsumerApplication.java
+/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/consumer_v3/src/main/java/com/chatapp/consumer/config/ConfigureSQS.java
+/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/consumer_v3/src/main/java/com/chatapp/consumer/controller/ConsumerHealthController.java
+/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/consumer_v3/src/main/java/com/chatapp/consumer/manager/RoomManager.java
+/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/consumer_v3/src/main/java/com/chatapp/consumer/model/MessageQueue.java
+/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/consumer_v3/src/main/java/com/chatapp/consumer/service/DatabaseWriter.java
+/Users/rohitdabhi/Desktop/BDS Assigmnets/ChatServer-and-Client-/consumer_v3/src/main/java/com/chatapp/consumer/service/SQSConsumer.java
