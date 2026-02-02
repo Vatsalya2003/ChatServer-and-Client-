@@ -1,0 +1,7 @@
+com/chatapp/consumer/controller/ConsumerHealthController.class
+com/chatapp/consumer/manager/RoomManager.class
+com/chatapp/consumer/ConsumerApplication.class
+com/chatapp/consumer/model/MessageQueue.class
+com/chatapp/consumer/service/SQSConsumer.class
+com/chatapp/consumer/config/ConfigureSQS.class
+com/chatapp/consumer/service/DatabaseWriter.class

@@ -1,0 +1,163 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------------< chatServer:client-part2 >-----------------------
+[INFO] Building client-part2 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- exec:3.6.2:java (default-cli) @ client-part2 ---
+Configuration Detail:
+  Threads: 20
+  Messages per thread: 500
+  Total messages: 10000
+
+Generating 10000 messages in Total
+-----Finished creating all messages-----
+Starting 20 threads...
+
+Waiting for threads to finish...
+
+Thread-5 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/6
+Thread-20 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/1
+Thread-9 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/10
+Thread-10 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/11
+Thread-15 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/16
+Thread-4 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/5
+Thread-7 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/8
+Thread-14 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/15
+Thread-17 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/18
+Thread-1 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/2
+Thread-3 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/4
+Thread-2 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/3
+Thread-8 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/9
+Thread-18 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/19
+Thread-16 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/17
+Thread-11 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/12
+Thread-12 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/13
+Thread-19 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/20
+Thread-6 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/7
+Thread-13 (Attempt 1): Connecting to ws://34.214.238.248:8080/chat/14
+SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+Thread-7: Attempting connection...
+Thread-18: Attempting connection...
+Thread-2: Attempting connection...
+Thread-17: Attempting connection...
+Thread-6: Attempting connection...
+Thread-3: Attempting connection...
+Thread-14: Attempting connection...
+Thread-8: Attempting connection...
+Thread-15: Attempting connection...
+Thread-11: Attempting connection...
+Thread-19: Attempting connection...
+Thread-13: Attempting connection...
+Thread-4: Attempting connection...
+Thread-16: Attempting connection...
+Thread-5: Attempting connection...
+Thread-12: Attempting connection...
+Thread-9: Attempting connection...
+Thread-1: Attempting connection...
+Thread-20: Attempting connection...
+Thread-10: Attempting connection...
+✅ Thread-6: Connected to ws://34.214.238.248:8080/chat/7
+✅ Thread-19: Connected to ws://34.214.238.248:8080/chat/20
+✅ Thread-16: Connected to ws://34.214.238.248:8080/chat/17
+Thread-16: connectBlocking returned: true, connected flag: true
+Thread-6: connectBlocking returned: true, connected flag: true
+✅ Thread-6: Successfully connected!
+Thread-19: connectBlocking returned: true, connected flag: true
+✅ Thread-19: Successfully connected!
+✅ Thread-16: Successfully connected!
+✅ Thread-18: Connected to ws://34.214.238.248:8080/chat/19
+Thread-18: connectBlocking returned: true, connected flag: true
+✅ Thread-18: Successfully connected!
+✅ Thread-11: Connected to ws://34.214.238.248:8080/chat/12
+✅ Thread-17: Connected to ws://34.214.238.248:8080/chat/18
+Thread-11: connectBlocking returned: true, connected flag: true
+✅ Thread-11: Successfully connected!
+✅ Thread-12: Connected to ws://34.214.238.248:8080/chat/13
+Thread-17: connectBlocking returned: true, connected flag: true
+Thread-12: connectBlocking returned: true, connected flag: true
+✅ Thread-12: Successfully connected!
+✅ Thread-17: Successfully connected!
+✅ Thread-10: Connected to ws://34.214.238.248:8080/chat/11
+Thread-10: connectBlocking returned: true, connected flag: true
+✅ Thread-10: Successfully connected!
+✅ Thread-5: Connected to ws://34.214.238.248:8080/chat/6
+Thread-5: connectBlocking returned: true, connected flag: true
+✅ Thread-5: Successfully connected!
+✅ Thread-13: Connected to ws://34.214.238.248:8080/chat/14
+Thread-13: connectBlocking returned: true, connected flag: true
+✅ Thread-13: Successfully connected!
+✅ Thread-4: Connected to ws://34.214.238.248:8080/chat/5
+Thread-4: connectBlocking returned: true, connected flag: true
+✅ Thread-4: Successfully connected!
+✅ Thread-8: Connected to ws://34.214.238.248:8080/chat/9
+Thread-8: connectBlocking returned: true, connected flag: true
+✅ Thread-8: Successfully connected!
+✅ Thread-7: Connected to ws://34.214.238.248:8080/chat/8
+✅ Thread-2: Connected to ws://34.214.238.248:8080/chat/3
+Thread-7: connectBlocking returned: true, connected flag: true
+✅ Thread-7: Successfully connected!
+✅ Thread-1: Connected to ws://34.214.238.248:8080/chat/2
+Thread-2: connectBlocking returned: true, connected flag: true
+Thread-1: connectBlocking returned: true, connected flag: true
+✅ Thread-1: Successfully connected!
+✅ Thread-15: Connected to ws://34.214.238.248:8080/chat/16
+✅ Thread-2: Successfully connected!
+Thread-15: connectBlocking returned: true, connected flag: true
+✅ Thread-15: Successfully connected!
+✅ Thread-9: Connected to ws://34.214.238.248:8080/chat/10
+✅ Thread-20: Connected to ws://34.214.238.248:8080/chat/1
+Thread-9: connectBlocking returned: true, connected flag: true
+✅ Thread-9: Successfully connected!
+Thread-20: connectBlocking returned: true, connected flag: true
+✅ Thread-20: Successfully connected!
+✅ Thread-3: Connected to ws://34.214.238.248:8080/chat/4
+Thread-3: connectBlocking returned: true, connected flag: true
+✅ Thread-3: Successfully connected!
+✅ Thread-14: Connected to ws://34.214.238.248:8080/chat/15
+Thread-14: connectBlocking returned: true, connected flag: true
+✅ Thread-14: Successfully connected!
+Thread 11: Sent 500 messages
+Thread 16: Sent 500 messages
+Thread 7: Sent 500 messages
+Thread 1: Sent 500 messages
+Thread 5: Sent 500 messages
+Thread 19: Sent 500 messages
+Thread 3: Sent 500 messages
+Thread 17: Sent 500 messages
+Thread 6: Sent 500 messages
+Thread 9: Sent 500 messages
+Thread 4: Sent 500 messages
+Thread 20: Sent 500 messages
+Thread 18: Sent 500 messages
+Thread 13: Sent 500 messages
+Thread 12: Sent 500 messages
+Thread 14: Sent 500 messages
+Thread 8: Sent 500 messages
+Thread 10: Sent 500 messages
+Thread 15: Sent 500 messages
+Thread 2: Sent 500 messages
+ ------------ RESULTS ---------------
+Successful: 10000
+Failed: 0
+Runtime: 27422 ms
+Throughput: 364.67 msg/sec
+Connections: 20
+Reconnections: 0
+
+-------- Statistical Analysis ------
+  Mean: 48.80 ms
+  Median: 44 ms
+  95th percentile: 90 ms
+  99th percentile: 163 ms
+  Min: 0 ms
+  Max: 414 ms
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  29.730 s
+[INFO] Finished at: 2025-11-20T23:44:49-08:00
+[INFO] ------------------------------------------------------------------------

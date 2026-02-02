@@ -12,8 +12,10 @@ import java.util.concurrent.*;
  */
 public class MainPhase {
 
-    private static final String Server_Url = "ws://52.36.65.70:8080";
-    private static final int Threads = 80;
+//    private static final String Server_Url = "ws://44.243.189.214:8080";
+    private static final String Server_Url = "ws://chat-app-t2Medium-2024449659.us-west-2.elb.amazonaws.com";
+//    private static final String Server_Url = "ws://chatServer-ALB-2050845721.us-west-2.elb.amazonaws.com";
+    private static final int Threads = 256;
     private static final int TotalMessages = 500000;
     private static final int ThreadMessages = TotalMessages / Threads;
 
